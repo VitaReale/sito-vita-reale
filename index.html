@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vita Reale</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      html { scroll-behavior: smooth; }
+    </style>
+    <script>
+      // Configurazione di Tailwind
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'primary': '#F6EEDF',
+              'secondary': '#2B282A',
+              'tertiary': '#647F76',
+              'accent': '#CAA15A',
+              'error': '#BF6B49',
+              'historical': '#566B74',
+            },
+            fontFamily: {
+              'heading': ['Helvetica Now Display', 'sans-serif'],
+              'body': ['Utopia Std', 'serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <!-- React & Babel for JSX in browser -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.26.0",
+    "vite": "https://aistudiocdn.com/vite@^7.1.11",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.4"
+  }
+}
+</script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+      // --- INIZIO CODICE APPLICAZIONE REACT ---
+
+      // --- COMPONENTI ---
+
+      const Loader = () => (
+        <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" style={{color: 'currentColor'}}>
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      );
+
+      const Card = ({ icon, title, children }) => {
+        return (
+          <div className="bg-white p-8 rounded-lg shadow-md text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-tertiary/20">
+            <div className="flex justify-center items-center mb-4">
+              {icon}
+            </div>
+            <h3 className="text-2xl font-bold font-heading mb-3 text-secondary">{title}</h3>
+            <p className="text-secondary/80">{children}</p>
+          </div>
+        );
+      };
+      
+      const ProjectGenerator = () => {
+        return (
+          <section id="app" className="py-24 bg-primary">
+            <div className="container mx-auto px-6 text-center">
+              <h2 className="text-4xl font-bold font-heading mb-4 text-secondary">Generatore di Idee per Progetti</h2>
+              <p className="text-lg text-secondary/80 mb-8 max-w-3xl mx-auto">
+                Hai bisogno di ispirazione per il prossimo progetto della nostra associazione? Inserisci un tema e lascia che l'IA ti aiuti a trovare idee innovative.
+              </p>
+      
+              <div className="max-w-xl mx-auto p-6 bg-white/50 rounded-lg border border-accent/20">
+                <p className="text-tertiary font-semibold">
+                  Questa funzionalità è attualmente in fase di sviluppo e richiede una configurazione lato server per funzionare in modo sicuro. 
+                  <br/>
+                  Torna presto per provarla!
+                </p>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Header = () => {
+        const [isScrolled, setIsScrolled] = React.useState(false);
+        const navLinks = [
+          { href: '#home', label: 'Home' },
+          { href: '#about', label: 'Chi Siamo' },
+          { href: '#mission', label: 'Cosa Facciamo' },
+          { href: '#core-missions', label: 'Scopo' },
+          { href: '#contact', label: 'Contatti' },
+        ];
+
+        React.useEffect(() => {
+          const handleScroll = () => {
+            setIsScrolled(window.scrollY > 10);
+          };
+          window.addEventListener('scroll', handleScroll);
+          return () => window.removeEventListener('scroll', handleScroll);
+        }, []);
+
+        return (
+          <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-primary/95 backdrop-blur-sm shadow-md' : 'bg-transparent'}`}>
+            <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+              <a 
+                href="#home" 
+                className="flex items-center text-2xl font-bold font-heading tracking-wider transition-colors duration-300" 
+                style={{ color: isScrolled ? '#2B282A' : '#F6EEDF' }}
+              >
+                <svg 
+                  className="h-12 w-auto mr-3"
+                  data-name="Livello 1" 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  version="1.1" 
+                  viewBox="0 0 1080 1350"
+                  fill="currentColor"
+                >
+                  <polygon points="531.25 404.43 357.21 676.86 132.25 525.43 227.8 877.98 834.45 877.98 926.25 525.43 705.05 676.86 531.25 404.43"/>
+                </svg>
+                VITA REALE
+              </a>
+              <div className="hidden md:flex items-center space-x-8">
+                  <nav className="flex items-center space-x-6">
+                  {navLinks.map((link) => (
+                      <a key={link.href} href={link.href} className={`font-bold transition-colors duration-300 ${isScrolled ? 'text-secondary hover:text-accent' : 'text-primary hover:text-accent'}`}>
+                      {link.label}
+                      </a>
+                  ))}
+                  </nav>
+                  <div className="flex items-center space-x-4">
+                       <a 
+                          href="./collabora.html" 
+                          className={`font-bold border-2 rounded-full px-5 py-2 text-sm transition-all duration-300 ${isScrolled ? 'border-accent text-accent hover:bg-accent hover:text-primary' : 'border-primary text-primary hover:bg-primary hover:text-secondary'}`}
+                          >
+                          Collabora con noi
+                      </a>
+                      <a 
+                          href="#" 
+                          className="bg-accent hover:bg-opacity-90 text-secondary font-bold py-2.5 px-6 rounded-full text-sm transition-transform duration-300 ease-in-out hover:scale-105"
+                          >
+                          Dona Ora
+                      </a>
+                  </div>
+              </div>
+            </div>
+          </header>
+        );
+      };
+
+      const Hero = () => {
+        return (
+          <section id="home" className="relative h-screen flex items-center justify-center text-center text-primary">
+            <div className="absolute inset-0 z-0">
+              <img src="https://picsum.photos/1920/1080?random=1" alt="Background" className="w-full h-full object-cover"/>
+              <div className="absolute inset-0 bg-secondary bg-opacity-60"></div>
+            </div>
+            <div className="relative z-10 p-6">
+              <h1 className="text-5xl md:text-7xl font-extrabold font-heading mb-4" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.7)'}}>
+                Gesù la vera speranza ieri, oggi e sempre.
+              </h1>
+              <p className="text-lg md:text-2xl mb-8 max-w-3xl mx-auto font-light" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.7)'}}>
+                Abbiamo a cuore questo paese e crediamo che ogni vita sia preziosa davanti a Dio, nessuna esclusa.
+              </p>
+              <a href="#contact" className="bg-accent hover:bg-opacity-90 text-secondary font-bold py-3 px-8 rounded-full text-lg transition-transform duration-300 ease-in-out hover:scale-105 inline-block">
+                Contattaci
+              </a>
+            </div>
+          </section>
+        );
+      };
+
+      const About = () => {
+        return (
+          <section id="about" className="sticky top-0 bg-secondary rounded-t-3xl shadow-2xl -mt-6">
+            <div className="container mx-auto px-6 py-24">
+              <div className="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                  <img src="https://picsum.photos/600/400?random=2" alt="Chi Siamo" className="rounded-lg shadow-xl w-full" />
+                </div>
+                <div className="text-primary">
+                  <h2 className="text-4xl font-bold font-heading mb-6">Chi Siamo</h2>
+                  <p className="mb-4 text-lg">
+                    Vita Reale è un'associazione il cui scopo è raggiungere ogni persona sulla terra con la verità e l'amore di Gesù.
+                  </p>
+                  <p className="text-lg">
+                    Lo facciamo servendo le chiese locali, equipaggiando e incoraggiando i credenti, ovunque essi siano, a condividere il Vangelo con ogni persona. Chiunque può essere parte di questa missione. Partecipa anche tu alle nostre iniziative! Se vuoi saperne di più, scrivici sulle nostre pagine Facebook e Instagram.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Mission = () => {
+        return (
+          <section id="mission" className="sticky top-0 bg-primary rounded-t-3xl shadow-2xl -mt-6">
+            <div className="container mx-auto px-6 text-center py-24">
+              <h2 className="text-4xl font-bold font-heading mb-16 text-secondary">Vita Reale si occupa di:</h2>
+              <div className="grid md:grid-cols-3 gap-8">
+                <Card
+                  icon={
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  }
+                  title="Preghiera"
+                >
+                  Tutto inizia dalla Preghiera. Vita Reale è nata da una preghiera: Raggiungere ogni persona sulla terra con la verità e l'amore di Gesù.
+                </Card>
+                <Card
+                  icon={
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h10a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.737 16.525l.822-1.05-1.033-.763-1.44 1.815.421 1.782 1.405-.331 1.148-1.448-.323-1.005zM16.263 16.525l-.822-1.05 1.033-.763 1.44 1.815-.421 1.782-1.405-.331-1.148-1.448.323-1.005zM12 18a2 2 0 100-4 2 2 0 000 4z" />
+                    </svg>
+                  }
+                  title="Evangelizzazione"
+                >
+                  Lo scopo di Vita Reale è raggiungere ogni casa. Solo l'anno scorso abbiamo raggiunto 82 milioni di case!
+                </Card>
+                <Card
+                  icon={
+                     <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                  }
+                  title="Discepolato"
+                >
+                  Vita Reale ha reso proprie le parole di Gesù: «Andate dunque e fate miei discepoli tutti i popoli...»
+                </Card>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const CoreMissions = () => {
+          const [openIndex, setOpenIndex] = React.useState(0);
+          const handleToggle = (index) => {
+              setOpenIndex(openIndex === index ? null : index);
+          };
+          const AccordionItem = ({ title, children, isOpen, onClick }) => {
+            return (
+              <div className="border-b border-primary/20">
+                <button
+                  onClick={onClick}
+                  className="w-full text-left py-5 px-6 flex justify-between items-center text-primary hover:bg-primary/5 transition-colors"
+                >
+                  <span className="text-xl font-heading">{title}</span>
+                  <svg
+                    className={`w-6 h-6 transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-96' : 'max-h-0'}`}
+                >
+                  <div className="p-6 text-primary/90">
+                    {children}
+                  </div>
+                </div>
+              </div>
+            );
+          };
+          const missions = [
+              {
+                  title: 'Ogni preghiera',
+                  content: (
+                      <p className="text-lg italic">"La preghiera è l'equalizzatore divino. Alcuni predicano, altri insegnano, altri cantano pubblicamente, ma tutti possono pregare".<br/>- Dick Eastman</p>
+                  )
+              },
+              {
+                  title: 'Ogni persona',
+                  content: (
+                       <div className="flex items-center gap-8">
+                          <div className="flex-1">
+                              <p className="mb-4">Vita Reale è un ministero di 75 anni con più di 155 sedi in tutto il mondo, con lo scopo di raggiungere ogni uomo in ogni luogo con l'amore di Dio.</p>
+                              <p className="text-3xl font-bold text-accent">1,47 MILIARDI di persone raggiunte</p>
+                          </div>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-24 w-24 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                          </svg>
+                      </div>
+                  )
+              },
+              {
+                  title: 'Ogni casa',
+                  content: (
+                       <p className="text-lg">Abbiamo visto oltre 110 milioni di persone rispondere positivamente al Vangelo e solo l'anno scorso abbiamo raggiunto 82 milioni di case!</p>
+                  )
+              }
+          ];
+
+        return (
+          <section id="core-missions" className="sticky top-0 bg-secondary rounded-t-3xl shadow-2xl -mt-6">
+            <div className="container mx-auto px-6 py-24">
+              <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold font-heading text-primary">Vita Reale ha tre missioni fondamentali</h2>
+              </div>
+              <div className="max-w-4xl mx-auto bg-primary/5 rounded-lg">
+                 {missions.map((mission, index) => (
+                  <AccordionItem
+                    key={index}
+                    title={mission.title}
+                    isOpen={openIndex === index}
+                    onClick={() => handleToggle(index)}
+                  >
+                    {mission.content}
+                  </AccordionItem>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+      
+      const Testimonial = () => {
+        return (
+          <section id="testimonial" className="sticky top-0 bg-tertiary rounded-t-3xl shadow-2xl -mt-6">
+            <div className="container mx-auto px-6 py-24">
+               <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold font-heading text-primary">Dicono di noi</h2>
+              </div>
+              <div className="max-w-4xl mx-auto bg-white/10 p-8 md:p-12 rounded-lg backdrop-blur-sm">
+                 <div className="md:flex items-center gap-8">
+                   <div className="flex-shrink-0 mb-6 md:mb-0 text-center">
+                      <img 
+                        src="https://picsum.photos/seed/billygraham/128/128" 
+                        alt="Dr. Billy Graham" 
+                        className="w-32 h-32 rounded-full object-cover mx-auto mb-4"
+                      />
+                      <p className="font-bold text-primary text-lg">Dr. Billy Graham</p>
+                      <p className="text-sm text-primary/70">Evangelista</p>
+                   </div>
+                   <div className="relative text-center md:text-left">
+                      <svg className="absolute -top-4 -left-6 h-10 w-10 text-primary/20" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true">
+                          <path d="M9.333 4C4.186 4 0 8.186 0 13.333c0 4.28 2.827 7.947 6.667 9.04v-6.507H4.533C4.813 11.2 6.827 8 9.333 8V4zm13.334 0C17.52 4 13.333 8.186 13.333 13.333c0 4.28 2.827 7.947 6.667 9.04v-6.507H17.867c.28-4.627 2.294-7.827 4.8-7.827V4z" />
+                      </svg>
+                      <blockquote className="text-xl italic text-primary/90 leading-relaxed z-10 relative pl-4 md:pl-0">
+                        "Vita Reale è uno dei movimenti più efficaci per Cristo che io conosca. Il loro impegno per l'evangelizzazione e il discepolato è un modello per tutti noi. Sono grato a Dio per la loro visione e il loro impatto globale."
+                      </blockquote>
+                   </div>
+                 </div>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Contact = () => {
+        return (
+          <section id="contact" className="sticky top-0 bg-secondary rounded-t-3xl shadow-2xl -mt-6">
+            <div className="container mx-auto px-6 py-24">
+              <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold font-heading text-primary">Contattaci</h2>
+                <p className="text-lg text-primary/80 mt-4 max-w-3xl mx-auto">
+                  Hai domande o vuoi collaborare? Siamo qui per te.
+                </p>
+              </div>
+              <div className="max-w-2xl mx-auto">
+                <form className="space-y-4" onSubmit={e => e.preventDefault()}>
+                  <div>
+                    <input type="text" placeholder="Il tuo Nome" className="w-full p-3 rounded-lg bg-primary/10 border-2 border-transparent focus:border-accent focus:outline-none text-primary placeholder-primary/50"/>
+                  </div>
+                  <div>
+                    <input type="email" placeholder="La tua Email" className="w-full p-3 rounded-lg bg-primary/10 border-2 border-transparent focus:border-accent focus:outline-none text-primary placeholder-primary/50"/>
+                  </div>
+                  <div>
+                    <textarea placeholder="Il tuo Messaggio" rows={5} className="w-full p-3 rounded-lg bg-primary/10 border-2 border-transparent focus:border-accent focus:outline-none text-primary placeholder-primary/50"></textarea>
+                  </div>
+                  <button type="submit" className="w-full bg-accent hover:bg-opacity-90 text-secondary font-bold py-3 px-6 rounded-lg transition-transform duration-300 ease-in-out hover:scale-105">
+                    Invia Messaggio
+                  </button>
+                </form>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Footer = () => {
+        return (
+          <footer className="bg-secondary border-t border-historical/30 py-8">
+            <div className="container mx-auto px-6 text-center text-primary/60">
+              <p>&copy; {new Date().getFullYear()} Vita Reale. Tutti i diritti riservati.</p>
+              <div className="flex justify-center space-x-4 mt-4">
+                <a href="#" className="hover:text-accent transition-colors">Facebook</a>
+                <a href="#" className="hover:text-accent transition-colors">Twitter</a>
+                <a href="#" className="hover:text-accent transition-colors">Instagram</a>
+              </div>
+            </div>
+          </footer>
+        );
+      };
+
+      // --- COMPONENTE PRINCIPALE APP ---
+
+      const App = () => {
+        return (
+          <div className="bg-primary text-secondary font-body antialiased">
+            <Header />
+            <main className="relative">
+              <Hero />
+              <div className="relative z-20">
+                <About />
+                <Mission />
+                <CoreMissions />
+                <Testimonial />
+                <Contact />
+              </div>
+            </main>
+            <Footer />
+          </div>
+        );
+      };
+
+      // --- RENDER DELL'APP ---
+
+      const rootElement = document.getElementById('root');
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+
+    </script>
+</body>
+</html>
