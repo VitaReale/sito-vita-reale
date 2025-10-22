@@ -1,48 +1,43 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vita Reale</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              'primary': '#F6EEDF',
-              'secondary': '#2B282A',
-              'tertiary': '#647F76',
-              'accent': '#CAA15A',
-              'error': '#BF6B49',
-              'historical': '#566B74',
-            },
-            fontFamily: {
-              'heading': ['Helvetica Now Display', 'sans-serif'],
-              'body': ['Utopia Std', 'serif'],
-            }
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary': '#F6EEDF',
+            'secondary': '#2B282A',
+            'tertiary': '#647F76',
+            'accent': '#CAA15A',
+            'error': '#BF6B49',
+            'historical': '#566B74',
+          },
+          fontFamily: {
+            'heading': ['Helvetica Now Display', 'sans-serif'],
+            'body': ['Utopia Std', 'serif'],
           }
         }
       }
-    </script>
-    <style>
-      html {
-        scroll-behavior: smooth;
-      }
-    </style>
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://aistudiocdn.com/react@^19.2.0",
-        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-        "react/": "https://aistudiocdn.com/react@^19.2.0/",
-        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.26.0",
-        "vite": "https://aistudiocdn.com/vite@^7.1.11",
-        "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.4"
-      }
     }
-    </script>
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.26.0",
+    "vite": "https://aistudiocdn.com/vite@^7.1.11",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.4"
+  }
+}
+</script>
 </head>
 <body>
     <div id="root"></div>
