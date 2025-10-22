@@ -5,13 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vita Reale</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      html { scroll-behavior: smooth; }
-    </style>
     <script>
-      // Configurazione di Tailwind
       tailwind.config = {
         theme: {
           extend: {
@@ -31,12 +26,17 @@
         }
       }
     </script>
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
 <script type="importmap">
 {
   "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.26.0",
     "vite": "https://aistudiocdn.com/vite@^7.1.11",
     "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.4"
