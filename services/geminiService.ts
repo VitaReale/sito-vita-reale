@@ -1,7 +1,9 @@
 
+
 import { GoogleGenAI, Type } from "@google/genai";
 import type { ProjectIdea } from '../types';
 
+// Fix: Per @google/genai coding guidelines, the API key must be obtained from process.env.API_KEY. This also resolves the TypeScript error "Property 'env' does not exist on type 'ImportMeta'".
 const API_KEY = process.env.API_KEY;
 
 if (!API_KEY) {
@@ -49,8 +51,11 @@ export const generateProjectIdeas = async (theme: string): Promise<ProjectIdea[]
       },
     });
 
-    const jsonText = response.text.trim();
-    const ideas: ProjectIdea[] = JSON.parse(jsonText);
+    const jsonText = response.text;
+    if (!jsonText) {
+      throw new Error("Received an empty or undefined response from the API.");
+    }
+    const ideas: ProjectIdea[] = JSON.parse(jsonText.trim());
     return ideas;
 
   } catch (error) {
